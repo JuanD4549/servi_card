@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1008883091098",
+    "project_id": "servicardjj",
+    "storage_bucket": "servicardjj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008883091098:android:263caa46ae566cd43b4123",
+        "android_client_info": {
+          "package_name": "com.example.servi_card"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008883091098-te0696qn7f9umkvo9agl5d2ldgpj9r35.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAMKL5s7BmlpsWEBsjyp-oJTKXl0MMB9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008883091098-te0696qn7f9umkvo9agl5d2ldgpj9r35.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
