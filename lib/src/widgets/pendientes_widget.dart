@@ -40,5 +40,6 @@ class _PendientesWidgetState extends State<PendientesWidget> {
 
   _downloadMantenimientos() async {
     _listaPedidos = await _pedidoService.getPedido();
+    setState(() {});
   }
 }

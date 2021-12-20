@@ -11,7 +11,8 @@ class PedidoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GFCard(
       boxFit: BoxFit.cover,
-      image: Image.asset('your asset image'),
+      image: Image.asset(
+          'https://riacomptech.com/wp-content/uploads/2018/04/delivery.blue_.png'),
       title: GFListTile(
         title: Text(model.idPedido! + "|" + model.idPedido!),
         subTitle: Text(model.cliente!),
