@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:servi_card/src/models/cliente_model.dart';
 import 'package:servi_card/src/models/foto_model.dart';
+import 'package:servi_card/src/models/repartidor_model.dart';
 
 Pedido pedidoFromJson(String str) => Pedido.fromJson(json.decode(str));
 
@@ -14,6 +15,7 @@ class Pedido {
       this.direccion,
       this.tipoServicio,
       required this.idPedido,
+      this.repartidor,
       this.cliente,
       this.foto});
 
@@ -24,6 +26,7 @@ class Pedido {
   String idPedido;
   Cliente? cliente;
   Foto? foto;
+  Repartidor? repartidor;
 
   factory Pedido.fromJson(Map<String, dynamic> json) => Pedido(
       hdr: json["hdr"],
@@ -31,6 +34,7 @@ class Pedido {
       direccion: json["direccion"],
       tipoServicio: json["tipoServicio"],
       idPedido: json["idPedido"],
+      repartidor: Repartidor.fromJson(json["repartidor"]),
       cliente: Cliente.fromJson(json["cliente"]),
       foto: Foto.fromJson(json["foto"]));
   Map<String, dynamic> toJson() => {
@@ -39,6 +43,7 @@ class Pedido {
         "direccion": direccion,
         "tipoServicio": tipoServicio,
         "idPedido": idPedido,
+        "repartidor": repartidor!.toJson(),
         "cliente": cliente!.toJson(),
         "foto": foto!.toJson()
       };

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:servi_card/src/widgets/confirmados_widget.dart';
+import 'package:servi_card/src/widgets/notificados_widget.dart';
 import 'package:servi_card/src/widgets/pendientes_widget.dart';
 
 class ItemMenu {
@@ -8,11 +10,13 @@ class ItemMenu {
 }
 
 List<ItemMenu> menuOptions = [
-  ItemMenu(Icons.home, "Inicio"),
-  ItemMenu(Icons.build, "Mantenimientos"),
-  ItemMenu(Icons.cable, "Materiales"),
+  ItemMenu(Icons.home, "Pendientes"),
+  ItemMenu(Icons.build, "Confirmados"),
+  ItemMenu(Icons.cable, "Notificados"),
 ];
 
 List<Widget> homeWidgets = [
   const PendientesWidget(),
+  const ConfirmadoWidget(),
+  const NotificadoWidget()
 ];

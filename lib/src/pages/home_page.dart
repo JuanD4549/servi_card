@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:servi_card/src/utils/home_menu.dart';
 
-final List<String> _options = ["Pendientes", "Confirmados", "Notificados"];
-
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 

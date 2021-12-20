@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:servi_card/src/models/pedido_model.dart';
+import 'package:servi_card/src/service/pedido_service.dart';
 import 'package:servi_card/src/widgets/pedido_card.dart';
 
 class PendientesWidget extends StatefulWidget {
@@ -10,8 +10,8 @@ class PendientesWidget extends StatefulWidget {
 }
 
 class _PendientesWidgetState extends State<PendientesWidget> {
-  final MantenimientoService _mantenimientoService = MantenimientoService();
-  List<Pedido>? _listaPedidos;
+  final PedidoService _pedidoService = PedidoService();
+  List? _listaPedidos;
 
   @override
   void initState() {
@@ -38,6 +38,6 @@ class _PendientesWidgetState extends State<PendientesWidget> {
   }
 
   _downloadMantenimientos() async {
-    _listaPedidos = await _mantenimientoService.getMantenimientos();
+    _listaPedidos = await _pedidoService.getPedido();
   }
 }
