@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
 import 'package:servi_card/src/pages/pedido_page.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:getwidget/getwidget.dart';
 
 class PedidoCard extends StatelessWidget {
   const PedidoCard({Key? key, required this.model}) : super(key: key);
@@ -9,20 +9,30 @@ class PedidoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Firebase.initializeApp();
-    return Card(
-        child: ListTile(
-      onTap: () {
-        Navigator.push<void>(
-          context,
-          MaterialPageRoute<void>(
-              builder: (BuildContext context) => PedidoPage(
-                    pedido: model,
-                  )),
-        );
-      },
-      title: Text(model.idPedido! + "|" + model.hdr!),
-      subtitle: Text(model.estado!.toString()),
-    ));
+    return GFCard(
+      boxFit: BoxFit.cover,
+      image: Image.asset('your asset image'),
+      title: GFListTile(
+        title: Text(model.idPedido! + "|" + model.idPedido!),
+        subTitle: Text(model.cliente!),
+      ),
+      content: Text(model.direccion!),
+      buttonBar: GFButtonBar(
+        children: <Widget>[
+          GFButton(
+            onPressed: () {
+              Navigator.push<void>(
+                context,
+                MaterialPageRoute<void>(
+                    builder: (BuildContext context) => PedidoPage(
+                          pedido: model,
+                        )),
+              );
+            },
+            text: 'Detalles',
+          )
+        ],
+      ),
+    );
   }
 }
