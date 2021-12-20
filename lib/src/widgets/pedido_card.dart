@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
 import 'package:servi_card/src/pages/pedido_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class PedidoCard extends StatelessWidget {
   const PedidoCard({Key? key, required this.model}) : super(key: key);
@@ -8,6 +9,7 @@ class PedidoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Firebase.initializeApp();
     return Card(
         child: ListTile(
       onTap: () {
@@ -19,8 +21,8 @@ class PedidoCard extends StatelessWidget {
                   )),
         );
       },
-      title: Text(model.idPedido + "|" + model.hdr!),
-      subtitle: Text(model.cliente!.nombre!),
+      title: Text(model.idPedido! + "|" + model.hdr!),
+      subtitle: Text(model.estado!.toString()),
     ));
   }
 }

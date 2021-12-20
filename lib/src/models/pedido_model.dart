@@ -1,9 +1,5 @@
 import 'dart:convert';
 
-import 'package:servi_card/src/models/cliente_model.dart';
-import 'package:servi_card/src/models/foto_model.dart';
-import 'package:servi_card/src/models/repartidor_model.dart';
-
 Pedido pedidoFromJson(String str) => Pedido.fromJson(json.decode(str));
 
 String pedidoToJson(Pedido data) => json.encode(data.toJson());
@@ -14,37 +10,37 @@ class Pedido {
       this.estado,
       this.direccion,
       this.tipoServicio,
-      required this.idPedido,
+      this.idPedido,
       this.repartidor,
       this.cliente,
       this.foto});
 
   String? hdr;
-  int? estado;
+  String? estado;
   String? direccion;
   String? tipoServicio;
-  String idPedido;
-  Cliente? cliente;
-  Foto? foto;
-  Repartidor? repartidor;
+  String? idPedido;
+  String? cliente;
+  String? foto;
+  String? repartidor;
 
   factory Pedido.fromJson(Map<String, dynamic> json) => Pedido(
-      hdr: json["hdr"],
-      estado: json["estado"],
+      cliente: json["cliente"],
       direccion: json["direccion"],
-      tipoServicio: json["tipoServicio"],
+      estado: json["estado"],
+      foto: json["foto"],
+      hdr: json["hdr"],
       idPedido: json["idPedido"],
-      repartidor: Repartidor.fromJson(json["repartidor"]),
-      cliente: Cliente.fromJson(json["cliente"]),
-      foto: Foto.fromJson(json["foto"]));
+      repartidor: json["repartidor"],
+      tipoServicio: json["tipoServicio"]);
   Map<String, dynamic> toJson() => {
         "hdr": hdr,
         "estado": estado,
         "direccion": direccion,
         "tipoServicio": tipoServicio,
         "idPedido": idPedido,
-        "repartidor": repartidor!.toJson(),
-        "cliente": cliente!.toJson(),
-        "foto": foto!.toJson()
+        "repartidor": repartidor,
+        "cliente": cliente,
+        "foto": foto
       };
 }

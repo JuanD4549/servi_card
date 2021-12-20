@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:servi_card/src/pages/home_page.dart';
 import 'package:servi_card/src/theme/app_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized;
-  Firebase.initializeApp();
   runApp(const MyApp());
 }
 
