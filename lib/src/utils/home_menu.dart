@@ -10,9 +10,9 @@ class ItemMenu {
 }
 
 List<ItemMenu> menuOptions = [
-  ItemMenu(Icons.home, "Pendientes"),
-  ItemMenu(Icons.build, "Confirmados"),
-  ItemMenu(Icons.cable, "Notificados"),
+  ItemMenu(Icons.shopping_cart_sharp, "Pendientes"),
+  ItemMenu(Icons.check_circle_outline_rounded, "Confirmados"),
+  ItemMenu(Icons.chat_rounded, "Notificados"),
 ];
 
 List<Widget> homeWidgets = [
