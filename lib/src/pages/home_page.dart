@@ -11,7 +11,9 @@ class HomePage extends StatelessWidget {
     var myProvider = Provider.of<MyProvider>(context);
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(myProvider.mitexto),
+        ),
         endDrawer: const Drawer(),
         body: homeWidgets[0],
         bottomNavigationBar: BottomNavigationBar(

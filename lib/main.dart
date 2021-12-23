@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:servi_card/providers/provider.dart';
 import 'package:servi_card/src/pages/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,13 +28,16 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final bool modeValue = mode ?? false;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'ServiCard',
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          brightness: modeValue ? Brightness.light : Brightness.dark),
-      home: const HomePage(),
+    return ChangeNotifierProvider(
+      create: (context) => MyProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'ServiCard',
+        theme: ThemeData(
+            primarySwatch: Colors.blue,
+            brightness: modeValue ? Brightness.light : Brightness.dark),
+        home: const HomePage(),
+      ),
     );
   }
 
