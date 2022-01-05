@@ -1,4 +1,9 @@
+import 'dart:async';
+import 'dart:developer' as developer;
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:servi_card/providers/provider.dart';
 import 'package:servi_card/src/utils/home_menu.dart';
 import 'package:provider/provider.dart';
@@ -14,15 +19,6 @@ class _HomePageState extends State<HomePage> {
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-  @override
-  void initState() {
-    super.initState();
-    initConnectivity();
-
-    _connectivitySubscription =
-        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -64,7 +60,11 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(myProvider.mitexto),
+          title: Text(
+            myProvider.mitexto +
+                'Connection Status: ${_connectionStatus.toString()}',
+            softWrap: true,
+          ),
         ),
         endDrawer: const Drawer(),
         body: homeWidgets[0],
