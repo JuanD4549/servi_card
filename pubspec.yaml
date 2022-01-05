@@ -37,6 +37,7 @@ dependencies:
   shared_preferences: ^2.0.11
   getwidget: ^2.0.4
   provider:
+  connectivity_plus: ^2.2.0
 
 dev_dependencies:
   flutter_test:

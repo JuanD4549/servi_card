@@ -10,19 +10,27 @@ class PedidoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GFCard(
       boxFit: BoxFit.cover,
-      image: Image.asset(
-        "assets/img/imgTest.gif",
-        height: MediaQuery.of(context).size.height * 0.1,
+      image: Image.network(
+        model.foto!.url!,
+        height: MediaQuery.of(context).size.height * 0.2,
         width: MediaQuery.of(context).size.width,
-        fit: BoxFit.cover,
       ),
       showImage: true,
       title: GFListTile(
-        avatar: const GFAvatar(
-          backgroundImage: AssetImage('assets/img/3.png'),
+        title: Text(
+          model.id! + " | " + model.hdr!,
+          style: TextStyle(
+              color: Colors.blue.shade300,
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
-        title: Text(model.id! + " | " + model.hdr!),
-        subTitle: Text(model.cliente!.nombre!),
+        subTitle: Container(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: Text(
+            model.cliente!.nombre!,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
+        ),
       ),
       content: Text(model.direccion!),
       buttonBar: GFButtonBar(
