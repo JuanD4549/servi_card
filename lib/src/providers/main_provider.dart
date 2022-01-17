@@ -23,6 +23,12 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> getPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _mode = prefs.getBool("mode") ?? true;
+    return _mode;
+  }
+
   Future<bool> initPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     _mode = prefs.getBool("mode") ?? true;

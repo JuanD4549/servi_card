@@ -1,48 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:servi_card/providers/provider.dart';
 import 'package:servi_card/src/pages/home_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:servi_card/src/providers/main_provider.dart';
+import 'package:servi_card/src/providers/pedido_provider.dart';
+import 'package:servi_card/src/theme/app_theme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized;
-  runApp(const MyApp());
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => PedidoProvider()),
+    ChangeNotifierProvider(create: (_) => MainProvider())
+  ], child: const MyApp()));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  bool? mode;
-  @override
-  void initState() {
-    super.initState();
-    _setupMode();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final bool modeValue = mode ?? false;
-    return ChangeNotifierProvider(
-      create: (context) => MyProvider(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'ServiCard',
-        theme: ThemeData(
-            primarySwatch: Colors.blue,
-            brightness: modeValue ? Brightness.light : Brightness.dark),
-        home: const HomePage(),
-      ),
-    );
-  }
-
-  _setupMode() async {
-    final SharedPreferences prefs = await _prefs;
-    mode = prefs.getBool("mode");
+    final mainProvider = Provider.of<MainProvider>(context, listen: true);
+    return FutureBuilder<bool>(
+        future: mainProvider.getPreferences(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ScreenUtilInit(
+              builder: () => MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.themeData(mainProvider.mode),
+                home: const HomePage(),
+              ),
+            );
+          }
+          return const SizedBox.square(
+              dimension: 100.0, child: CircularProgressIndicator());
+        });
   }
 }

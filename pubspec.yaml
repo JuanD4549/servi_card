@@ -38,6 +38,10 @@ dependencies:
   getwidget: ^2.0.4
   provider:
   connectivity_plus: ^2.2.0
+  sqflite: ^2.0.1
+  path_provider: ^2.0.8
+  flutter_screenutil: ^5.1.0
+  cloud_firestore: ^3.1.6
 
 dev_dependencies:
   flutter_test:
@@ -50,7 +54,6 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
   firebase_core:
-  cloud_firestore:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
