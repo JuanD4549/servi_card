@@ -113,30 +113,23 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () async {
                         await _sendToServer();
                       },
-                      child: const Text(
+                      child: Text(
                         'ServiCard',
                         style: TextStyle(
-                            fontSize: 19, fontWeight: FontWeight.w400),
+                            color: Colors.blueAccent.shade200,
+                            fontSize: 19,
+                            fontWeight: FontWeight.w400),
                       ),
                     )),
                 SizedBox(
-                  width: 40,
-                  child: RawMaterialButton(
-                    onPressed: () {
-                      SizedBox.square(
-                          dimension: 60.0,
-                          child: Switch(
-                              value: mainProvider.mode,
-                              onChanged: (bool value) async {
-                                mainProvider.mode = value;
-                                final prefs =
-                                    await SharedPreferences.getInstance();
-                                await prefs.setBool("mode", value);
-                              }));
-                    },
-                    child: const CircleAvatar(),
-                  ),
-                )
+                    width: 40,
+                    child: Switch(
+                        value: mainProvider.mode,
+                        onChanged: (bool value) async {
+                          mainProvider.mode = value;
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setBool("mode", value);
+                        }))
               ],
             ),
           ),
