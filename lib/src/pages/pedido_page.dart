@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
+import 'package:servi_card/src/pages/update_pedido.dart';
 
 class PedidoPage extends StatelessWidget {
   const PedidoPage({Key? key, required this.pedido}) : super(key: key);
@@ -36,103 +39,142 @@ class PedidoPage extends StatelessWidget {
         levelIndicator,
       ],
     );
-    final bottomContentText = Column(children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            const Text(
-              "Direccion: ",
-              style: TextStyle(fontSize: 18.0),
-            ),
-            Expanded(
-                child: Text(
-              pedido.direccion.toString(),
-              style: const TextStyle(
-                  fontSize: 18.0, fontWeight: FontWeight.normal),
-              softWrap: true,
-            ))
-          ],
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            const Text(
-              "Tipo de servicio: ",
-              style: TextStyle(fontSize: 18.0),
-            ),
-            Text(pedido.tipoServicio.toString(),
+    Widget verImg() {
+      if (pedido.foto.urlDocumento != "") {
+        return Image.network(
+          pedido.foto.urlDocumento!,
+          height: MediaQuery.of(context).size.height * 0.1,
+        );
+      } else {
+        return const Text("Sin imagen");
+      }
+    }
+
+    final bottomContentText = Expanded(
+      child: ListView(children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              const Text(
+                "Direccion: ",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Expanded(
+                  child: Text(
+                pedido.direccion.toString(),
                 style: const TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.normal))
-          ],
+                    fontSize: 18.0, fontWeight: FontWeight.normal),
+                softWrap: true,
+              ))
+            ],
+          ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            const Text(
-              "Cliente: ",
-              style: TextStyle(fontSize: 18.0),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              const Text(
+                "Tipo de servicio: ",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Text(pedido.tipoServicio.toString(),
+                  style: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.normal))
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              const Text(
+                "Cliente: ",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Text(pedido.cliente.nombre.toString(),
+                  style: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.normal))
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              const Text(
+                "Teléfono: ",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Text(pedido.cliente.telefono.toString(),
+                  style: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.normal))
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              const Text(
+                "Cédula: ",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Text(pedido.cliente.cedula.toString(),
+                  style: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.normal))
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              const Text(
+                "Observación: ",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Text(pedido.observacion.toString(),
+                  style: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.normal))
+            ],
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                const Text(
+                  "Foto: ",
+                  style: TextStyle(fontSize: 18.0),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [verImg()],
+                  ),
+                ),
+              ],
             ),
-            Text(pedido.cliente.nombre.toString(),
-                style: const TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.normal))
-          ],
+          ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            const Text(
-              "Teléfono: ",
-              style: TextStyle(fontSize: 18.0),
-            ),
-            Text(pedido.cliente.telefono.toString(),
-                style: const TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.normal))
-          ],
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            const Text(
-              "Cédula: ",
-              style: TextStyle(fontSize: 18.0),
-            ),
-            Text(pedido.cliente.cedula.toString(),
-                style: const TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.normal))
-          ],
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            const Text(
-              "Observación: ",
-              style: TextStyle(fontSize: 18.0),
-            ),
-            Text(pedido.observacion.toString(),
-                style: const TextStyle(
-                    fontSize: 18.0, fontWeight: FontWeight.normal))
-          ],
-        ),
-      ),
-    ]);
+      ]),
+    );
+
     final bottomAction = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: GFButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UpdatePedido(
+                              pedido: pedido,
+                            )));
+              },
               text: "Confirmar",
               color: Colors.green,
               shape: GFButtonShape.square,
@@ -141,7 +183,14 @@ class PedidoPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: GFButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => UpdatePedido(
+                              pedido: pedido,
+                            )));
+              },
               text: "Notificar",
               color: Colors.red,
               shape: GFButtonShape.square,
