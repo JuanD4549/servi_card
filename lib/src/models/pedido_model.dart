@@ -15,31 +15,28 @@ class Pedido {
       this.tipoServicio,
       this.id,
       this.repartidorid,
-      this.clienteid,
-      this.fotoid,
-      this.cliente,
-      this.foto});
+      this.observacion,
+      required this.cliente,
+      required this.foto});
 
   String? hdr;
   String? estado;
   String? direccion;
   String? tipoServicio;
   String? id;
-  String? clienteid;
-  String? fotoid;
   String? repartidorid;
-  Cliente? cliente;
-  Foto? foto;
+  String? observacion;
+  Cliente cliente;
+  Foto foto;
 
   factory Pedido.fromJson(Map<String, dynamic> json) => Pedido(
-      clienteid: json["clienteid"],
       direccion: json["direccion"],
       estado: json["estado"],
-      fotoid: json["fotoid"],
       hdr: json["hdr"],
       id: json["id"],
       repartidorid: json["repartidorid"],
       tipoServicio: json["tipoServicio"],
+      observacion: json["observacion"],
       cliente: Cliente.fromJson(json["cliente"]),
       foto: Foto.fromJson(json["foto"]));
   Map<String, dynamic> toJson() => {
@@ -49,9 +46,8 @@ class Pedido {
         "tipoServicio": tipoServicio,
         "id": id,
         "repartidorid": repartidorid,
-        "clienteid": clienteid,
-        "fotoid": fotoid,
-        "cliente": cliente!.toJson(),
-        "foto": foto!.toJson(),
+        "observacion": observacion,
+        "cliente": cliente.toJson(),
+        "foto": foto.toJson(),
       };
 }

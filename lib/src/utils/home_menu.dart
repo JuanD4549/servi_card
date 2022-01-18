@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:servi_card/src/widgets/confirmados_widget.dart';
-import 'package:servi_card/src/widgets/notificados_widget.dart';
-import 'package:servi_card/src/widgets/pendientes_widget.dart';
+import 'package:servi_card/src/widgets/pedidos_widget.dart';
 
 class ItemMenu {
   String title;
@@ -16,7 +14,13 @@ List<ItemMenu> menuOptions = [
 ];
 
 List<Widget> homeWidgets = [
-  const PendientesWidget(),
-  const ConfirmadoWidget(),
-  const NotificadoWidget()
+  const PedidosWidget(
+    estado: "0",
+  ),
+  const PedidosWidget(
+    estado: "1",
+  ),
+  const PedidosWidget(
+    estado: "0.5",
+  )
 ];

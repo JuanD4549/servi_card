@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
 
 class PedidoPage extends StatelessWidget {
@@ -7,7 +8,193 @@ class PedidoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(appBar: AppBar(title: Text(pedido.hdr ?? ""))));
+    final levelIndicator = GFProgressBar(
+      width: 120,
+      backgroundColor: const Color.fromRGBO(209, 224, 224, 0.2),
+      percentage: double.parse(pedido.estado.toString()),
+      progressBarColor: Colors.green,
+    );
+    final topContentText = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const SizedBox(height: 10.0),
+        const Icon(
+          Icons.airport_shuttle_sharp,
+          color: Colors.white,
+          size: 40.0,
+        ),
+        const SizedBox(
+          width: 100.0,
+          child: Divider(color: Colors.green),
+        ),
+        const SizedBox(height: 20.0),
+        Text(
+          pedido.id! + " | HDR: " + pedido.hdr!,
+          style: const TextStyle(color: Colors.white, fontSize: 45.0),
+        ),
+        const SizedBox(height: 30.0),
+        levelIndicator,
+      ],
+    );
+    final bottomContentText = Column(children: [
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            const Text(
+              "Direccion: ",
+              style: TextStyle(fontSize: 18.0),
+            ),
+            Expanded(
+                child: Text(
+              pedido.direccion.toString(),
+              style: const TextStyle(
+                  fontSize: 18.0, fontWeight: FontWeight.normal),
+              softWrap: true,
+            ))
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            const Text(
+              "Tipo de servicio: ",
+              style: TextStyle(fontSize: 18.0),
+            ),
+            Text(pedido.tipoServicio.toString(),
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.normal))
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            const Text(
+              "Cliente: ",
+              style: TextStyle(fontSize: 18.0),
+            ),
+            Text(pedido.cliente.nombre.toString(),
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.normal))
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            const Text(
+              "Teléfono: ",
+              style: TextStyle(fontSize: 18.0),
+            ),
+            Text(pedido.cliente.telefono.toString(),
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.normal))
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            const Text(
+              "Cédula: ",
+              style: TextStyle(fontSize: 18.0),
+            ),
+            Text(pedido.cliente.cedula.toString(),
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.normal))
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            const Text(
+              "Observación: ",
+              style: TextStyle(fontSize: 18.0),
+            ),
+            Text(pedido.observacion.toString(),
+                style: const TextStyle(
+                    fontSize: 18.0, fontWeight: FontWeight.normal))
+          ],
+        ),
+      ),
+    ]);
+    final bottomAction = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GFButton(
+              onPressed: () {},
+              text: "Confirmar",
+              color: Colors.green,
+              shape: GFButtonShape.square,
+              size: GFSize.LARGE),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GFButton(
+              onPressed: () {},
+              text: "Notificar",
+              color: Colors.red,
+              shape: GFButtonShape.square,
+              size: GFSize.LARGE),
+        ),
+      ],
+    );
+    List<Widget> button() {
+      if (pedido.estado == "0") {
+        return <Widget>[bottomContentText, bottomAction];
+      } else {
+        return <Widget>[bottomContentText];
+      }
+    }
+
+    final bottomContent = Expanded(
+      child: Column(children: button()),
+    );
+    final topContent = Stack(
+      children: <Widget>[
+        Image.network(
+          pedido.foto.urlPedido!,
+          height: MediaQuery.of(context).size.height * 0.5,
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height * 0.5,
+          padding: const EdgeInsets.only(top: 40, left: 65),
+          width: MediaQuery.of(context).size.width,
+          decoration:
+              const BoxDecoration(color: Color.fromRGBO(58, 66, 86, .9)),
+          child: Center(
+            child: topContentText,
+          ),
+        ),
+        Positioned(
+          left: 8.0,
+          top: 50.0,
+          child: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
+        )
+      ],
+    );
+    return Scaffold(
+        body: Column(
+      children: <Widget>[topContent, bottomContent],
+    ));
   }
 }

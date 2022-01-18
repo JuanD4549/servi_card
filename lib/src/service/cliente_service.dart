@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:servi_card/src/models/cliente_model.dart';
-import 'package:servi_card/src/models/pedido_model.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class ClienteService {
   ClienteService();
 
-  Future<Cliente> getCliente(Pedido pedido) async {
+  Future<Cliente> getCliente(String clienteid) async {
     await Firebase.initializeApp();
     Cliente _c = Cliente();
     try {
@@ -15,7 +14,7 @@ class ClienteService {
       QuerySnapshot cliente = await collectionReference.get();
       if (cliente.docs.isNotEmpty) {
         for (var doc in cliente.docs) {
-          if (pedido.clienteid == doc.id) {
+          if (clienteid == doc.id) {
             _c = Cliente(
                 cedula: doc.get("cedula").toString(),
                 nombre: doc.get("nombre").toString(),

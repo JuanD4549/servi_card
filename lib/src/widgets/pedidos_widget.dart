@@ -3,14 +3,14 @@ import 'package:servi_card/src/models/pedido_model.dart';
 import 'package:servi_card/src/widgets/pedido_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PendientesWidget extends StatefulWidget {
-  const PendientesWidget({Key? key}) : super(key: key);
-
+class PedidosWidget extends StatefulWidget {
+  const PedidosWidget({Key? key, required this.estado}) : super(key: key);
+  final String estado;
   @override
-  State<PendientesWidget> createState() => _PendientesWidgetState();
+  State<PedidosWidget> createState() => _PedidosWidgetState();
 }
 
-class _PendientesWidgetState extends State<PendientesWidget> {
+class _PedidosWidgetState extends State<PedidosWidget> {
   final Stream<QuerySnapshot> _pedidoStrem =
       FirebaseFirestore.instance.collection('pedido').snapshots();
   @override
@@ -35,7 +35,10 @@ class _PendientesWidgetState extends State<PendientesWidget> {
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Pedido model =
                 Pedido.fromJson(document.data() as Map<String, dynamic>);
-            return PedidoCard(model: model);
+            if (model.estado == widget.estado) {
+              return PedidoCard(model: model);
+            }
+            return const Text("");
           }).toList());
         });
   }

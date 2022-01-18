@@ -8,6 +8,7 @@ import 'package:servi_card/src/providers/main_provider.dart';
 import 'package:servi_card/src/utils/home_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:servi_card/src/widgets/conection_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -105,11 +106,7 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 SizedBox(
-                    width: 50,
-                    child: RawMaterialButton(
-                        onPressed: () {}, child: const Icon(Icons.menu))),
-                SizedBox(
-                    width: 270,
+                    width: 320,
                     child: RawMaterialButton(
                       onPressed: () {},
                       child: const Text(
@@ -121,7 +118,18 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   width: 40,
                   child: RawMaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      SizedBox.square(
+                          dimension: 60.0,
+                          child: Switch(
+                              value: mainProvider.mode,
+                              onChanged: (bool value) async {
+                                mainProvider.mode = value;
+                                final prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.setBool("mode", value);
+                              }));
+                    },
                     child: const CircleAvatar(),
                   ),
                 )
