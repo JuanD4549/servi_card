@@ -173,6 +173,7 @@ class PedidoPage extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => UpdatePedido(
                               pedido: pedido,
+                              estado: "1",
                             )));
               },
               text: "Confirmar",
@@ -189,6 +190,7 @@ class PedidoPage extends StatelessWidget {
                     MaterialPageRoute(
                         builder: (context) => UpdatePedido(
                               pedido: pedido,
+                              estado: "0.5",
                             )));
               },
               text: "Notificar",

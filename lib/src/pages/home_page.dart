@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer' as developer;
+import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -108,7 +110,9 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                     width: 320,
                     child: RawMaterialButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await _sendToServer();
+                      },
                       child: const Text(
                         'ServiCard',
                         style: TextStyle(
@@ -140,5 +144,31 @@ class _HomePageState extends State<HomePage> {
         Expanded(child: homeWidgets[mainProvider.index])
       ],
     );
+  }
+
+  Future<void> _sendToServer() async {
+    FirebaseFirestore.instance.runTransaction((Transaction transaction) async {
+      CollectionReference reference =
+          FirebaseFirestore.instance.collection('pedido');
+      reference.add({
+        "hdr": "145662",
+        "estado": "0",
+        "direccion": "Av. 10 de agosto",
+        "tipoServicio": "normal",
+        "id": "MV" + Random().nextInt(1000).toString(),
+        "repartidorid": "lffTkTbfoZEKWVn4uQyJ",
+        "observacion": "",
+        "cliente": {
+          "cedula": "1726766452",
+          "nombre": "Prueba",
+          "telefono": "0978657557"
+        },
+        "foto": {
+          "urlDocumento": "",
+          "urlPedido":
+              "https://th.bing.com/th/id/R.cb4dd03b99d6ac2cd46513427fe57d63?rik=NcnP6pvFsfil5g&pid=ImgRaw&r=0"
+        },
+      });
+    });
   }
 }

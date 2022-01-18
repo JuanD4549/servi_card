@@ -8,8 +8,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
 
 class UpdatePedido extends StatefulWidget {
-  const UpdatePedido({Key? key, required this.pedido}) : super(key: key);
+  const UpdatePedido({Key? key, required this.pedido, required this.estado})
+      : super(key: key);
   final Pedido pedido;
+  final String estado;
   @override
   _UpdatePedidoState createState() => _UpdatePedidoState();
 }
@@ -64,8 +66,9 @@ class _UpdatePedidoState extends State<UpdatePedido> {
             ),
             GFButton(
                 onPressed: () async {
-                  await _sendToServer();
-                  await _sendToServerImg();
+                  String url = await _sendToServerImg();
+                  await _sendToServer(url);
+
                   Navigator.of(context).pop();
                 },
                 text: "Enviar",
@@ -108,20 +111,36 @@ class _UpdatePedidoState extends State<UpdatePedido> {
     ));
   }
 
-  Future<void> _sendToServerImg() async {
-    final Reference firebasesStorageRef =
-        FirebaseStorage.instance.ref().child(sampleImage!.path);
-    final UploadTask task = firebasesStorageRef.putFile(sampleImage!);
+  Future<String> _sendToServerImg() async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref =
+        storage.ref().child("Post Image" + DateTime.now().toString());
+    try {
+      UploadTask uploadTask = ref.putFile(sampleImage!);
+      uploadTask.then((res) {
+        return res.ref.getDownloadURL();
+      });
+    } catch (e) {
+      return "";
+    }
+    return "";
   }
 
-  Future<void> _sendToServer() async {
+  Future<void> _sendToServer(String url) async {
     FirebaseFirestore.instance.runTransaction((Transaction transaction) async {
       CollectionReference reference =
           FirebaseFirestore.instance.collection('pedido');
       QuerySnapshot pd = await reference.get();
       for (var doc in pd.docs) {
         if (widget.pedido.id == doc.get("id").toString()) {
-          await reference.doc(doc.id).update({"observacion": observacion.text});
+          await reference.doc(doc.id).update({
+            "observacion": observacion.text,
+            "estado": widget.estado,
+            "foto": {
+              "urlDocumento": url,
+              "urlPedido": widget.pedido.foto.urlPedido
+            }
+          });
         }
       }
     });
