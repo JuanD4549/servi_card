@@ -1,8 +1,10 @@
-import 'package:camera/camera.dart';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
 
 class UpdatePedido extends StatefulWidget {
@@ -14,29 +16,8 @@ class UpdatePedido extends StatefulWidget {
 
 class _UpdatePedidoState extends State<UpdatePedido> {
   final observacion = TextEditingController();
-  final CameraDescription camera = const CameraDescription(
-      name: "Equipo",
-      lensDirection: CameraLensDirection.back,
-      sensorOrientation: 0);
-  final cameras = availableCameras();
-  late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
-  @override
-  void initState() {
-    super.initState();
-    _controller = CameraController(
-      camera,
-      ResolutionPreset.medium,
-    );
-    _initializeControllerFuture = _controller.initialize();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+  File? sampleImage;
+  get picker => null;
   @override
   Widget build(BuildContext context) {
     String? obsValidation(String? value) {
@@ -53,6 +34,9 @@ class _UpdatePedidoState extends State<UpdatePedido> {
         ),
         body: Column(
           children: [
+            sampleImage == null
+                ? const Text("Select an Image")
+                : enableUpload(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Card(
@@ -73,24 +57,15 @@ class _UpdatePedidoState extends State<UpdatePedido> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: FloatingActionButton(
-                child: const Icon(Icons.camera_alt),
-                onPressed: () async {
-                  try {
-                    await _initializeControllerFuture;
-                    final path = join('assets', 'img', '${DateTime.now()}.png');
-                    XFile picture = await _controller.takePicture();
-                    picture.saveTo(path);
-                  } catch (e) {
-                    // Si se produce un error, regístralo en la consola.
-                    // ignore: avoid_print
-                    print(e);
-                  }
-                },
+                onPressed: getImage,
+                tooltip: "Add Image",
+                child: const Icon(Icons.add_a_photo),
               ),
             ),
             GFButton(
                 onPressed: () async {
                   await _sendToServer();
+                  await _sendToServerImg();
                   Navigator.of(context).pop();
                 },
                 text: "Enviar",
@@ -99,6 +74,44 @@ class _UpdatePedidoState extends State<UpdatePedido> {
                 size: GFSize.LARGE)
           ],
         ));
+  }
+
+  Future getImage() async {
+    // ignore: invalid_use_of_visible_for_testing_member
+    var tempImage = await ImagePicker.platform.getImage(
+        source: ImageSource.gallery,
+        maxWidth: null,
+        maxHeight: null,
+        imageQuality: null,
+        preferredCameraDevice: CameraDevice.front);
+
+    setState(() {
+      try {
+        sampleImage = File(tempImage!.path);
+      } catch (e) {
+        // ignore: avoid_print
+        print(e);
+      }
+    });
+  }
+
+  enableUpload() {
+    return SingleChildScrollView(
+        child: Column(
+      children: <Widget>[
+        Image.file(
+          sampleImage!,
+          height: 300.0,
+          width: 600.0,
+        ),
+      ],
+    ));
+  }
+
+  Future<void> _sendToServerImg() async {
+    final Reference firebasesStorageRef =
+        FirebaseStorage.instance.ref().child(sampleImage!.path);
+    final UploadTask task = firebasesStorageRef.putFile(sampleImage!);
   }
 
   Future<void> _sendToServer() async {
