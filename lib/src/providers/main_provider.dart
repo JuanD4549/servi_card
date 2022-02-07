@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MainProvider extends ChangeNotifier {
   bool _mode = true;
   int _index = 0;
+  String _token = "";
 
   bool get mode {
     return _mode;
@@ -23,15 +24,29 @@ class MainProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> getPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _mode = prefs.getBool("mode") ?? true;
-    return _mode;
+  String get token {
+    return _token;
   }
 
-  Future<bool> initPrefs() async {
+  set token(String newToken) {
+    updateToken(newToken);
+    _token = newToken;
+    notifyListeners();
+  }
+
+  Future<bool> getPreferences() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      _mode = prefs.getBool("mode") ?? true;
+      _token = prefs.getString("token") ?? "";
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> updateToken(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _mode = prefs.getBool("mode") ?? true;
-    return _mode;
+    await prefs.setString("token", token);
   }
 }
