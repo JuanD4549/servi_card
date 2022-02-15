@@ -1,4 +1,3 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
 import 'package:servi_card/src/pages/pedido_page.dart';
@@ -9,12 +8,11 @@ class PedidoCard extends StatelessWidget {
   final Pedido model;
   @override
   Widget build(BuildContext context) {
-    FirebaseStorage storage = FirebaseStorage.instance;
-    print(storage.bucket.characters);
     return GFCard(
       boxFit: BoxFit.cover,
       image: Image.network(
-        model.foto.urlPedido!,
+        model.foto.urlPedido ??
+            "http://www.musicapopular.cult.cu/wp-content/uploads/2017/12/imagen-no-disponible.png",
         height: MediaQuery.of(context).size.height * 0.2,
         width: MediaQuery.of(context).size.width,
       ),

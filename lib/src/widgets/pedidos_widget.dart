@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
+import 'package:servi_card/src/providers/main_provider.dart';
 import 'package:servi_card/src/widgets/pedido_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -11,10 +13,13 @@ class PedidosWidget extends StatefulWidget {
 }
 
 class _PedidosWidgetState extends State<PedidosWidget> {
-  final Stream<QuerySnapshot> _pedidoStrem =
-      FirebaseFirestore.instance.collection('pedido').snapshots();
   @override
   Widget build(BuildContext context) {
+    final mainProvider = Provider.of<MainProvider>(context, listen: true);
+    final Stream<QuerySnapshot> _pedidoStrem = FirebaseFirestore.instance
+        .collection('pedido')
+        .where("uidMotorizado", isEqualTo: mainProvider.token)
+        .snapshots();
     return StreamBuilder<QuerySnapshot>(
         stream: _pedidoStrem,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

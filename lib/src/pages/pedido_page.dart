@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print
-
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:servi_card/src/models/pedido_model.dart';

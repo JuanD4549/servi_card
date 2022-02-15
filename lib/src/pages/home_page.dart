@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
                     width: 320,
                     child: RawMaterialButton(
                       onPressed: () async {
-                        await _sendToServer();
+                        await _sendToServer(mainProvider.token);
                       },
                       child: Text(
                         'ServiCard',
@@ -139,22 +139,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _sendToServer() async {
+  Future<void> _sendToServer(String token) async {
     FirebaseFirestore.instance.runTransaction((Transaction transaction) async {
       CollectionReference reference =
           FirebaseFirestore.instance.collection('pedido');
       reference.add({
+        "uidMotorizado": token,
         "hdr": "145662",
         "estado": "0",
-        "direccion": "Av. 10 de agosto",
+        "lat": "-0.302233",
+        "log": "-78.477742",
+        "direccion": "Calle Juan Montalvo",
         "tipoServicio": "normal",
         "id": "MV" + Random().nextInt(1000).toString(),
         "repartidorid": "lffTkTbfoZEKWVn4uQyJ",
         "observacion": "",
         "cliente": {
           "cedula": "1726766452",
-          "nombre": "Prueba",
-          "telefono": "0978657557"
+          "nombre": "Movistar" + Random().nextInt(1000).toString(),
+          "telefono": "0978657557",
+          "urlFoto": "",
         },
         "foto": {
           "urlDocumento": "",
