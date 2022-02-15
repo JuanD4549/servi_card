@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1008883091098:android:263caa46ae566cd43b4123",
+        "mobilesdk_app_id": "1:1008883091098:android:f6b23db6ff0370823b4123",
         "android_client_info": {
           "package_name": "com.example.servi_card"
         }
@@ -20,7 +20,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCAMKL5s7BmlpsWEBsjyp-oJTKXl0MMB9c"
+          "current_key": "AIzaSyBY3_YAc5uiB2vb2TiIfEigwkxokyjd-Rg"
         }
       ],
       "services": {

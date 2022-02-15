@@ -1,28 +1,36 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'dart:developer' as developer;
+// ignore_for_file: avoid_print
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:servi_card/src/models/usuario_model.dart';
 
 class UsuarioService {
-  final String _firebaseAPIKey = 'AIzaSyCAMKL5s7BmlpsWEBsjyp-oJTKXl0MMB9c';
+  Future<UserCredential?> login(Usuario usuario) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+          email: usuario.email!, password: usuario.password!);
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
-  Future<Map<String, dynamic>> login(Usuario usuario) async {
-    final authData = {
-      'email': usuario.email,
-      'password': usuario.password,
-      'returnSecureToken': true
-    };
-
-    final queryParams = {"key": _firebaseAPIKey};
-
-    var uri = Uri.https("www.googleapis.com",
-        "/identitytoolkit/v3/relyingparty/verifyPassword", queryParams);
-
-    final resp = await http.post(uri, body: json.encode(authData));
-
-    Map<String, dynamic> decodedResp = json.decode(resp.body);
-    developer.log(decodedResp.toString());
-    return decodedResp;
+  bool validToken(String token) {
+    var _pedidoSn =
+        FirebaseFirestore.instance.collection('pedidos').doc().snapshots();
+    _pedidoSn.map((DocumentSnapshot document) {
+      if (document.get("uid") == token) {
+        return true;
+      }
+    });
+    return false;
   }
 }

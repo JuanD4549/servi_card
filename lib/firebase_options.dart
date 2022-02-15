@@ -44,8 +44,8 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCAMKL5s7BmlpsWEBsjyp-oJTKXl0MMB9c',
-    appId: '1:1008883091098:android:263caa46ae566cd43b4123',
+    apiKey: 'AIzaSyBY3_YAc5uiB2vb2TiIfEigwkxokyjd-Rg',
+    appId: '1:1008883091098:android:f6b23db6ff0370823b4123',
     messagingSenderId: '1008883091098',
     projectId: 'servicardjj',
     storageBucket: 'servicardjj.appspot.com',

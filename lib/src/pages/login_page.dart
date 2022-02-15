@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -108,13 +109,13 @@ class _LoginPageState extends State<LoginPage> {
                                             Usuario usuario = Usuario(
                                                 email: bloc.email,
                                                 password: bloc.password);
-                                            Map<String, dynamic> resp =
+                                            UserCredential? resp =
                                                 await usuarioService
                                                     .login(usuario);
-                                            if (resp.containsKey("idToken")) {
-                                              developer.log(resp["idToken"]);
-                                              mainProvider.token =
-                                                  resp['idToken'];
+                                            String token = (resp!.user!.uid);
+                                            if (token != "") {
+                                              developer.log(token);
+                                              mainProvider.token = token;
                                             }
                                           }
                                         : null,
