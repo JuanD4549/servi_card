@@ -24,7 +24,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   developer.log('Handling a background message ${message.messageId}');
 }
 /*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  developer.log('Handing a background message ${message.messageId}');
+  developer.log('Handing a background message ${message.messageId});
 }*/
 late AndroidNotificationChannel channel;
 
