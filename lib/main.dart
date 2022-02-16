@@ -16,27 +16,34 @@ import 'dart:developer' as developer;
 
 import 'firebase_options.dart';
 
+/// Define a top-level named handler which background/terminated messages will
+/// call.
+///
+/// To verify things are working, check out the native platform logs.
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  developer.log('Handing a background message ${message.messageId}');
+  developer.log('Handling a background message ${message.messageId}');
 }
-
+/*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  developer.log('Handing a background message ${message.messageId}');
+}*/
 late AndroidNotificationChannel channel;
 
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //background
+ //Notificacion cuando la aplicacion esta cerrada
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  if (!kIsWeb) {
+ if (!kIsWeb) {
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
       'High Importance Notifications', // title
-      description:
-          'This channel is used for important notifications.', // description
+      description: 'This channel is used for important notifications.', // description
       importance: Importance.high,
     );
 
@@ -60,6 +67,7 @@ void main() async {
       sound: true,
     );
   }
+
   runApp(MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => MainProvider())],
       child: const MyApp()));
@@ -77,9 +85,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    FirebaseMessaging.instance
+     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? value) => developer.log(value.toString()));
+
+  //Notificacion cuando la aplicación esta en Segundo Plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -100,6 +110,8 @@ class _MyAppState extends State<MyApp> {
         );
       }
     });
+
+    //Notificacion cuando la aplicacion esta abierta
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       developer.log('A new onMessageOpenedApp event was published!');
     });
