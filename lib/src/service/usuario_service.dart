@@ -15,9 +15,9 @@ class UsuarioService {
       return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        print('Contraseñana incorrecta.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        print('email incorrecto');
       }
     } catch (e) {
       print(e);
