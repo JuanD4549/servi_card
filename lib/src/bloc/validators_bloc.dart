@@ -23,7 +23,32 @@ class Validator {
       }
     },
   );
-
+  final telefonoValidator = StreamTransformer<String, String>.fromHandlers(
+    handleData: (data, sink) {
+      String pattern = r'(^[0-9]*$)';
+      RegExp regExp = RegExp(pattern);
+      if (regExp.hasMatch(data)) {
+        if (data.length == 10) {
+          sink.add(data);
+        }
+      } else {
+        sink.addError('El telefono no es válido');
+      }
+    },
+  );
+  final cedulaValidator = StreamTransformer<String, String>.fromHandlers(
+    handleData: (data, sink) {
+      String pattern = r'(^[0-9]*$)';
+      RegExp regExp = RegExp(pattern);
+      if (regExp.hasMatch(data)) {
+        if (data.length == 10) {
+          sink.add(data);
+        }
+      } else {
+        sink.addError('La cedula no es valida no es válido');
+      }
+    },
+  );
   final usernameValidator = StreamTransformer<String, String>.fromHandlers(
     handleData: (data, sink) {
       if (data.length >= 10) {

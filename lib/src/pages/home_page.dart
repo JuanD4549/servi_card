@@ -7,6 +7,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:servi_card/src/providers/main_provider.dart';
+import 'package:servi_card/src/service/usuario_service.dart';
 import 'package:servi_card/src/utils/home_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:servi_card/src/widgets/conection_widget.dart';
@@ -85,6 +86,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getBody() {
+    UsuarioService usuario = UsuarioService();
     var size = MediaQuery.of(context).size;
     final mainProvider = Provider.of<MainProvider>(context, listen: true);
     return Column(
@@ -108,21 +110,30 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 SizedBox(
-                    width: 320,
-                    child: RawMaterialButton(
-                      onPressed: () async {
-                        await _sendToServer(mainProvider.token);
-                      },
-                      child: Text(
-                        'ServiCard',
-                        style: TextStyle(
-                            color: Colors.blueAccent.shade200,
-                            fontSize: 19,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    )),
+                  width: MediaQuery.of(context).size.width / 2.5,
+                  child: FloatingActionButton(
+                    onPressed: () async {
+                      await usuario.logOutuser();
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, "/login");
+                    },
+                    child: Image.asset("assets/img/icono2.png"),
+                  ),
+                ),
                 SizedBox(
-                    width: 40,
+                    child: RawMaterialButton(
+                  onPressed: () async {
+                    await _sendToServer(mainProvider.token);
+                  },
+                  child: Text(
+                    'ServiCard',
+                    style: TextStyle(
+                        color: Colors.blueAccent.shade200,
+                        fontSize: 19,
+                        fontWeight: FontWeight.w400),
+                  ),
+                )),
+                SizedBox(
                     child: Switch(
                         value: mainProvider.mode,
                         onChanged: (bool value) async {

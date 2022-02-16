@@ -10,25 +10,29 @@ class Repartidor {
     this.nombre,
     this.cedula,
     this.telefono,
-    this.idRepartidor,
+    this.uid,
+    this.urlFoto,
   });
 
   String? nombre;
   String? cedula;
   String? telefono;
-  String? idRepartidor;
+  String? uid;
+  String? urlFoto;
 
   factory Repartidor.fromJson(Map<String, dynamic> json) => Repartidor(
         nombre: json["nombre"],
         cedula: json["cedula"],
         telefono: json["telefono"],
-        idRepartidor: json["id_repartidor"],
+        uid: json["uid"],
+        urlFoto: json["urlFoto"],
       );
 
   Map<String, dynamic> toJson() => {
         "nombre": nombre,
         "cedula": cedula,
         "telefono": telefono,
-        "id_repartidor": idRepartidor,
+        "uid": uid,
+        "urlFot": urlFoto,
       };
 }

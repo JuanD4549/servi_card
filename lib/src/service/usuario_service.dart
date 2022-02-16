@@ -2,12 +2,13 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:servi_card/src/models/repartidor_model.dart';
 
 import 'package:servi_card/src/models/usuario_model.dart';
 
 class UsuarioService {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   Future<UserCredential?> login(Usuario usuario) async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: usuario.email!, password: usuario.password!);
@@ -32,5 +33,32 @@ class UsuarioService {
       }
     });
     return false;
+  }
+
+  logOutuser() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
+  Future<bool> registerUser(Usuario usuario, Repartidor repartidor) async {
+    try {
+      final User? user = (await _auth.createUserWithEmailAndPassword(
+        email: usuario.email!,
+        password: usuario.password!,
+      ))
+          .user;
+      repartidor.uid = user!.uid;
+      createDateUser(repartidor);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> createDateUser(Repartidor usuario) async {
+    FirebaseFirestore.instance.runTransaction((Transaction transaction) async {
+      CollectionReference reference;
+      reference = FirebaseFirestore.instance.collection("repartidor");
+      await reference.add(usuario.toJson());
+    });
   }
 }
