@@ -115,6 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                                                   developer.log(token);
                                                   mainProvider.token = token;
                                                 }
+                                                Navigator.pushNamed(
+                                                    context, "/home");
                                               }
                                             : null,
                                         icon: const Icon(Icons.login),

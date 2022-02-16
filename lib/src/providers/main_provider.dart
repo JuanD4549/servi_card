@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainProvider extends ChangeNotifier {
-  bool _mode = true;
+  bool _mode = false;
   int _index = 0;
   String _token = "";
 

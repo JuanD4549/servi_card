@@ -23,6 +23,7 @@ import 'firebase_options.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   developer.log('Handling a background message ${message.messageId}');
 }
+
 /*Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   developer.log('Handing a background message ${message.messageId}');
 }*/
@@ -31,19 +32,19 @@ late AndroidNotificationChannel channel;
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
- //Notificacion cuando la aplicacion esta cerrada
+  //Notificacion cuando la aplicacion esta cerrada
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
- if (!kIsWeb) {
+  if (!kIsWeb) {
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
       'High Importance Notifications', // title
-      description: 'This channel is used for important notifications.', // description
+      description:
+          'This channel is used for important notifications.', // description
       importance: Importance.high,
     );
 
@@ -85,11 +86,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-     FirebaseMessaging.instance
+    FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? value) => developer.log(value.toString()));
 
-  //Notificacion cuando la aplicación esta en Segundo Plano
+    //Notificacion cuando la aplicación esta en Segundo Plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -136,9 +137,7 @@ class _MyAppState extends State<MyApp> {
                     },
                     home: mainProvider.token == ""
                         ? const LoginPage()
-                        : usuarioService.validToken(mainProvider.token)
-                            ? const LoginPage()
-                            : const HomePage()));
+                        : const HomePage()));
           }
           return const SizedBox.square(
               dimension: 100.0, child: CircularProgressIndicator());

@@ -51,10 +51,10 @@ class Validator {
   );
   final usernameValidator = StreamTransformer<String, String>.fromHandlers(
     handleData: (data, sink) {
-      if (data.length >= 10) {
+      if (data.isNotEmpty) {
         sink.add(data);
       } else {
-        sink.addError('El usuario debe tener al menos 10 caracteres');
+        sink.addError('Ingrese un nombre');
       }
     },
   );

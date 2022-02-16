@@ -114,6 +114,7 @@ class _HomePageState extends State<HomePage> {
                   child: FloatingActionButton(
                     onPressed: () async {
                       await usuario.logOutuser();
+                      mainProvider.token = "";
                       Navigator.pop(context);
                       Navigator.pushNamed(context, "/login");
                     },
