@@ -92,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                             icon: const Icon(
                                                 Icons.assignment_ind_outlined),
                                             hintText: '1726766452',
-                                            labelText: 'Cedula'))),
+                                            labelText: 'Cédula'))),
                             StreamBuilder(
                                 stream: bloc.telefonoStream,
                                 builder: (BuildContext context,
@@ -106,7 +106,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                             icon: const Icon(
                                                 Icons.phone_iphone_rounded),
                                             hintText: '0978657557',
-                                            labelText: 'Telefono'))),
+                                            labelText: 'Teléfono'))),
                             StreamBuilder(
                                 stream: bloc.passwordStream,
                                 builder: (BuildContext context,

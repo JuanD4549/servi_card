@@ -8,6 +8,7 @@ import 'package:servi_card/src/models/usuario_model.dart';
 
 class UsuarioService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
   Future<UserCredential?> login(Usuario usuario) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(

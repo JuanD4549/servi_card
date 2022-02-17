@@ -16,10 +16,6 @@ import 'dart:developer' as developer;
 
 import 'firebase_options.dart';
 
-/// Define a top-level named handler which background/terminated messages will
-/// call.
-///
-/// To verify things are working, check out the native platform logs.
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   developer.log('Handling a background message ${message.messageId}');
 }
@@ -37,7 +33,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  //Notificacion cuando la aplicacion esta cerrada
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   if (!kIsWeb) {
     channel = const AndroidNotificationChannel(
@@ -47,20 +42,11 @@ void main() async {
           'This channel is used for important notifications.', // description
       importance: Importance.high,
     );
-
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-    /// Create an Android Notification Channel.
-    ///
-    /// We use this channel in the `AndroidManifest.xml` file to override the
-    /// default FCM channel to enable heads up notifications.
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
-
-    /// Update the iOS foreground notification presentation options to allow
-    /// heads up notifications.
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: true,
@@ -89,8 +75,6 @@ class _MyAppState extends State<MyApp> {
     FirebaseMessaging.instance
         .getInitialMessage()
         .then((RemoteMessage? value) => developer.log(value.toString()));
-
-    //Notificacion cuando la aplicación esta en Segundo Plano
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -104,15 +88,12 @@ class _MyAppState extends State<MyApp> {
               channel.id,
               channel.name,
               channelDescription: channel.description,
-              //      one that already exists in example app.
               icon: 'launch_background',
             ),
           ),
         );
       }
     });
-
-    //Notificacion cuando la aplicacion esta abierta
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       developer.log('A new onMessageOpenedApp event was published!');
     });

@@ -113,8 +113,11 @@ class _LoginPageState extends State<LoginPage> {
                                                     (resp!.user!.uid);
                                                 if (token != "") {
                                                   developer.log(token);
-                                                  mainProvider.token = token;
+                                                  mainProvider.token =
+                                                      token; //login futuro
+
                                                 }
+                                                Navigator.pop(context);
                                                 Navigator.pushNamed(
                                                     context, "/home");
                                               }
