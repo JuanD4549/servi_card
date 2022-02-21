@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
 import 'package:servi_card/src/pages/update_pedido.dart';
+import 'package:servi_card/src/widgets/map_widget.dart';
 
 class PedidoPage extends StatelessWidget {
   const PedidoPage({Key? key, required this.pedido}) : super(key: key);
@@ -138,6 +139,11 @@ class PedidoPage extends StatelessWidget {
                       fontSize: 18.0, fontWeight: FontWeight.normal))
             ],
           ),
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width / 4,
+          height: MediaQuery.of(context).size.height / 4,
+          child: MapWidget(pedido: pedido),
         ),
         Expanded(
           child: Padding(
