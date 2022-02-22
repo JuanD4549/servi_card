@@ -4,17 +4,29 @@ import 'package:getwidget/getwidget.dart';
 import 'package:servi_card/src/models/pedido_model.dart';
 import 'package:servi_card/src/pages/update_pedido.dart';
 import 'package:servi_card/src/widgets/map_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class PedidoPage extends StatelessWidget {
+class PedidoPage extends StatefulWidget {
   const PedidoPage({Key? key, required this.pedido}) : super(key: key);
   final Pedido pedido;
+
+  @override
+  State<PedidoPage> createState() => _PedidoPageState();
+}
+
+class _PedidoPageState extends State<PedidoPage> {
+  void lauchWhatsapp(Pedido pedido) async {
+    String numero = "+593" + pedido.cliente.telefono!;
+    String url = "whatsapp://send?phone=$numero&text=" "";
+    await canLaunch(url) ? launch(url) : print("No se pudo abrir whatsapp");
+  }
 
   @override
   Widget build(BuildContext context) {
     final levelIndicator = GFProgressBar(
       width: 120,
       backgroundColor: const Color.fromRGBO(209, 224, 224, 0.2),
-      percentage: double.parse(pedido.estado.toString()),
+      percentage: double.parse(widget.pedido.estado.toString()),
       progressBarColor: Colors.green,
     );
     final topContentText = Column(
@@ -32,7 +44,7 @@ class PedidoPage extends StatelessWidget {
         ),
         const SizedBox(height: 20.0),
         Text(
-          pedido.id! + " | HDR: " + pedido.hdr!,
+          widget.pedido.id! + " | HDR: " + widget.pedido.hdr!,
           style: const TextStyle(color: Colors.white, fontSize: 45.0),
         ),
         const SizedBox(height: 30.0),
@@ -40,9 +52,9 @@ class PedidoPage extends StatelessWidget {
       ],
     );
     Widget verImg() {
-      if (pedido.foto.urlDocumento != "") {
+      if (widget.pedido.foto.urlDocumento != "") {
         return Image.network(
-          pedido.foto.urlDocumento!,
+          widget.pedido.foto.urlDocumento!,
           height: MediaQuery.of(context).size.height * 0.1,
         );
       } else {
@@ -62,7 +74,7 @@ class PedidoPage extends StatelessWidget {
               ),
               Expanded(
                   child: Text(
-                pedido.direccion.toString(),
+                widget.pedido.direccion.toString(),
                 style: const TextStyle(
                     fontSize: 18.0, fontWeight: FontWeight.normal),
                 softWrap: true,
@@ -78,7 +90,7 @@ class PedidoPage extends StatelessWidget {
                 "Tipo de servicio: ",
                 style: TextStyle(fontSize: 18.0),
               ),
-              Text(pedido.tipoServicio.toString(),
+              Text(widget.pedido.tipoServicio.toString(),
                   style: const TextStyle(
                       fontSize: 18.0, fontWeight: FontWeight.normal))
             ],
@@ -92,7 +104,7 @@ class PedidoPage extends StatelessWidget {
                 "Cliente: ",
                 style: TextStyle(fontSize: 18.0),
               ),
-              Text(pedido.cliente.nombre.toString(),
+              Text(widget.pedido.cliente.nombre.toString(),
                   style: const TextStyle(
                       fontSize: 18.0, fontWeight: FontWeight.normal))
             ],
@@ -106,9 +118,15 @@ class PedidoPage extends StatelessWidget {
                 "Teléfono: ",
                 style: TextStyle(fontSize: 18.0),
               ),
-              Text(pedido.cliente.telefono.toString(),
-                  style: const TextStyle(
-                      fontSize: 18.0, fontWeight: FontWeight.normal))
+              TextButton.icon(
+                onPressed: () {
+                  lauchWhatsapp(widget.pedido);
+                },
+                label: Text(widget.pedido.cliente.telefono.toString(),
+                    style: const TextStyle(
+                        fontSize: 18.0, fontWeight: FontWeight.normal)),
+                icon: const Icon(Icons.phone_android),
+              ),
             ],
           ),
         ),
@@ -120,21 +138,7 @@ class PedidoPage extends StatelessWidget {
                 "Cédula: ",
                 style: TextStyle(fontSize: 18.0),
               ),
-              Text(pedido.cliente.cedula.toString(),
-                  style: const TextStyle(
-                      fontSize: 18.0, fontWeight: FontWeight.normal))
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              const Text(
-                "Observación: ",
-                style: TextStyle(fontSize: 18.0),
-              ),
-              Text(pedido.observacion.toString(),
+              Text(widget.pedido.cliente.cedula.toString(),
                   style: const TextStyle(
                       fontSize: 18.0, fontWeight: FontWeight.normal))
             ],
@@ -143,7 +147,24 @@ class PedidoPage extends StatelessWidget {
         SizedBox(
           width: MediaQuery.of(context).size.width / 4,
           height: MediaQuery.of(context).size.height / 4,
-          child: MapWidget(pedido: pedido),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: MapWidget(pedido: widget.pedido),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              const Text(
+                "Observación: ",
+                style: TextStyle(fontSize: 18.0),
+              ),
+              Text(widget.pedido.observacion.toString(),
+                  style: const TextStyle(
+                      fontSize: 18.0, fontWeight: FontWeight.normal))
+            ],
+          ),
         ),
         Expanded(
           child: Padding(
@@ -177,7 +198,7 @@ class PedidoPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => UpdatePedido(
-                              pedido: pedido,
+                              pedido: widget.pedido,
                               estado: "1",
                             )));
               },
@@ -194,7 +215,7 @@ class PedidoPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (context) => UpdatePedido(
-                              pedido: pedido,
+                              pedido: widget.pedido,
                               estado: "0.5",
                             )));
               },
@@ -206,7 +227,7 @@ class PedidoPage extends StatelessWidget {
       ],
     );
     List<Widget> button() {
-      if (pedido.estado == "0") {
+      if (widget.pedido.estado == "0") {
         return <Widget>[bottomContentText, bottomAction];
       } else {
         return <Widget>[bottomContentText];
@@ -219,7 +240,7 @@ class PedidoPage extends StatelessWidget {
     final topContent = Stack(
       children: <Widget>[
         Image.network(
-          pedido.foto.urlPedido!,
+          widget.pedido.foto.urlPedido!,
           height: MediaQuery.of(context).size.height * 0.5,
         ),
         Container(

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 import 'dart:developer' as developer;
 import 'dart:math';
@@ -6,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:servi_card/src/models/repartidor_model.dart';
 import 'package:servi_card/src/providers/main_provider.dart';
 import 'package:servi_card/src/service/usuario_service.dart';
 import 'package:servi_card/src/utils/home_menu.dart';
@@ -28,7 +31,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     initConnectivity();
-
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
@@ -89,6 +91,8 @@ class _HomePageState extends State<HomePage> {
     UsuarioService usuario = UsuarioService();
     var size = MediaQuery.of(context).size;
     final mainProvider = Provider.of<MainProvider>(context, listen: true);
+    Repartidor repartidor = Repartidor();
+    UsuarioService userService = UsuarioService();
     return Column(
       children: [
         Padding(
@@ -110,38 +114,71 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width / 2.5,
+                    width: MediaQuery.of(context).size.width / 1.4,
+                    child: RawMaterialButton(
+                      onPressed: () async {
+                        await _sendToServer(mainProvider.token);
+                      },
+                      child: Text(
+                        'ServiCard',
+                        style: TextStyle(
+                            color: Colors.blueAccent.shade200,
+                            fontSize: 19,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    )),
+                SizedBox(
                   child: FloatingActionButton(
+                    elevation: 0,
+                    backgroundColor: const Color.fromARGB(0, 0, 0, 0),
                     onPressed: () async {
-                      await usuario.logOutuser();
-                      mainProvider.token = "";
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, "/login");
+                      repartidor =
+                          await userService.getUser(mainProvider.token);
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Bienvenido "),
+                              content: SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.09,
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        textMode(mainProvider.mode),
+                                        Switch(
+                                            value: mainProvider.mode,
+                                            onChanged: (bool value) async {
+                                              mainProvider.mode = value;
+                                              final prefs =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              await prefs.setBool(
+                                                  "mode", value);
+                                            })
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              actions: <Widget>[
+                                OutlinedButton(
+                                  child: const Text('Cerrar sesión '),
+                                  onPressed: () async {
+                                    await usuario.logOutuser();
+                                    mainProvider.token = "";
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(context, "/login");
+                                  },
+                                )
+                              ],
+                            );
+                          });
                     },
-                    child: Image.asset("assets/img/icono2.png"),
+                    child: const Icon(Icons.person),
                   ),
                 ),
-                SizedBox(
-                    child: RawMaterialButton(
-                  onPressed: () async {
-                    await _sendToServer(mainProvider.token);
-                  },
-                  child: Text(
-                    'ServiCard',
-                    style: TextStyle(
-                        color: Colors.blueAccent.shade200,
-                        fontSize: 19,
-                        fontWeight: FontWeight.w400),
-                  ),
-                )),
-                SizedBox(
-                    child: Switch(
-                        value: mainProvider.mode,
-                        onChanged: (bool value) async {
-                          mainProvider.mode = value;
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.setBool("mode", value);
-                        }))
               ],
             ),
           ),
@@ -149,6 +186,13 @@ class _HomePageState extends State<HomePage> {
         Expanded(child: homeWidgets[mainProvider.index])
       ],
     );
+  }
+
+  Text textMode(bool mode) {
+    if (mode) {
+      return const Text("Modo claro: ");
+    }
+    return const Text("Modo oscuro: ");
   }
 
   Future<void> _sendToServer(String token) async {

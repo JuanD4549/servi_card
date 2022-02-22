@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, duplicate_ignore
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +23,26 @@ class UsuarioService {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<Repartidor> getUser(String token) async {
+    try {
+      CollectionReference collectionReference =
+          FirebaseFirestore.instance.collection("repartidor");
+      QuerySnapshot pedido = await collectionReference.get();
+      if (pedido.docs.isNotEmpty) {
+        pedido.docs.map((DocumentSnapshot document) {
+          if (document.get("uid") == token) {
+            Repartidor model =
+                Repartidor.fromJson(document.data() as Map<String, dynamic>);
+            return model;
+          }
+        });
+      }
+    } catch (exp) {
+      print(exp);
+    }
+    return Repartidor();
   }
 
   bool validToken(String token) {
